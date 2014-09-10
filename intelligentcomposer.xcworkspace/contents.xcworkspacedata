@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:src"
+      name = "src">
+      <Group
+         location = "group:communication"
+         name = "communication">
+         <FileRef
+            location = "group:MySimpleReceive.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:MySimpleSend.cpp">
+         </FileRef>
+         <FileRef
+            location = "group:run-tests.sh">
+         </FileRef>
+         <FileRef
+            location = "group:TestSend.cpp">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:knowledgebase"
+         name = "knowledgebase">
+         <FileRef
+            location = "group:a.out">
+         </FileRef>
+         <FileRef
+            location = "group:knowledgebase.bin">
+         </FileRef>
+         <FileRef
+            location = "group:knowledgebase.cpp">
+         </FileRef>
+      </Group>
+   </Group>
+</Workspace>
