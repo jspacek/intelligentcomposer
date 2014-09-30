@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
     // the second one is a "stop" message with value true
     
     p << osc::BeginBundleImmediate
-        << osc::BeginMessage( "/dirMatrix4" )
-            << 3 << 5 << 6 << 5 << osc::EndMessage
+        << osc::BeginMessage( "/dirMatrixFive" )
+            << 13 << 14 << 15 << 16 << 17 << osc::EndMessage
         << osc::BeginMessage( "/stop" )
             << true << osc::EndMessage
         << osc::EndBundle;

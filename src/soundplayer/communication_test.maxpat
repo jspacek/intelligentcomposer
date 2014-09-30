@@ -7,7 +7,7 @@
 			"revision" : 8
 		}
 ,
-		"rect" : [ 255.0, 83.0, 850.0, 611.0 ],
+		"rect" : [ 5.0, 62.0, 974.0, 610.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -27,6 +27,212 @@
 		"digest" : "",
 		"tags" : "",
 		"boxes" : [ 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-11",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "int" ],
+					"patching_rect" : [ 100.0, 397.5, 35.0, 20.0 ],
+					"text" : "== 3"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-6",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "int" ],
+					"patching_rect" : [ 100.0, 340.0, 35.0, 20.0 ],
+					"text" : "== 3"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-10",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 6,
+					"outlettype" : [ "int", "int", "int", "int", "int", "int" ],
+					"patching_rect" : [ 265.0, 169.0, 109.0, 20.0 ],
+					"text" : "unpack 0 0 0 0 0 0"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"frgb" : 0.0,
+					"id" : "obj-28",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 404.0, 270.0, 199.0, 20.0 ],
+					"text" : "Test Internal Messages"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"frgb" : 0.0,
+					"id" : "obj-27",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 63.5, 233.0, 632.5, 20.0 ],
+					"text" : "File Player Testing"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"frgb" : 0.0,
+					"id" : "obj-25",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 63.5, 270.0, 199.0, 20.0 ],
+					"text" : "Test Directly Connected Messages"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-21",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 217.0, 531.0, 87.0, 18.0 ],
+					"text" : "17 80 1 48000"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-20",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 217.0, 487.0, 87.0, 18.0 ],
+					"text" : "16 80 1 48000"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-19",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 217.0, 441.0, 87.0, 18.0 ],
+					"text" : "15 80 1 48000"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-18",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 217.0, 397.5, 87.0, 18.0 ],
+					"text" : "14 80 1 48000"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-16",
+					"linecount" : 6,
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 714.0, 276.0, 229.0, 85.0 ],
+					"text" : ";\rsfPlayerNote 13 60 1 5000 0. -1 -1 -1 -1;\rsfPlayerNote 14 60 1 5000 0. -1 -1 -1 -1;\rsfPlayerNote 15 60 1 5000 0. -1 -1 -1 -1;\rsfPlayerNote 16 60 1 5000 0. -1 -1 -1 -1;\rsfPlayerNote 17 60 1 5000 0. -1 -1 -1 -1;\r"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-12",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 217.0, 343.0, 87.0, 18.0 ],
+					"text" : "13 80 1 48000"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-9",
+					"maxclass" : "ezdac~",
+					"numinlets" : 2,
+					"numoutlets" : 0,
+					"patching_rect" : [ 404.0, 562.0, 45.0, 45.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-7",
+					"linecount" : 4,
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 768.0, 423.0, 157.0, 58.0 ],
+					"text" : ";\rsfPlayerOnOff 1;\rsfPlayerVol 63;\rsfPlayerLoadSamples bang"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-2",
+					"maxclass" : "bpatcher",
+					"name" : "sfPlayerBP.maxpat",
+					"numinlets" : 4,
+					"numoutlets" : 3,
+					"outlettype" : [ "", "", "signal" ],
+					"patching_rect" : [ 385.0, 363.0, 237.0, 153.0 ]
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
@@ -50,7 +256,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 156.0, 252.0, 57.0, 18.0 ],
+					"patching_rect" : [ 141.0, 110.0, 57.0, 18.0 ],
 					"text" : "/test1 44"
 				}
 
@@ -63,7 +269,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 429.0, 201.0, 189.0, 21.0 ],
+					"patching_rect" : [ 408.0, 143.0, 189.0, 21.0 ],
 					"text" : "print receivedmess @popup 1"
 				}
 
@@ -77,7 +283,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 429.0, 168.0, 99.0, 20.0 ],
+					"patching_rect" : [ 408.0, 110.0, 99.0, 20.0 ],
 					"text" : "udpreceive 7000"
 				}
 
@@ -91,7 +297,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 429.0, 129.0, 230.0, 20.0 ],
+					"patching_rect" : [ 408.0, 71.0, 230.0, 20.0 ],
 					"text" : "Receive a message from OCP Test Send"
 				}
 
@@ -105,7 +311,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 83.0, 129.0, 215.0, 20.0 ],
+					"patching_rect" : [ 62.0, 71.0, 215.0, 20.0 ],
 					"text" : "Send a message to OCP Test Receive"
 				}
 
@@ -119,7 +325,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 90.0, 168.0, 50.0, 18.0 ],
+					"patching_rect" : [ 69.0, 110.0, 50.0, 18.0 ],
 					"text" : "/test 44"
 				}
 
@@ -132,13 +338,40 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 90.0, 201.0, 137.0, 20.0 ],
+					"patching_rect" : [ 69.0, 143.0, 137.0, 20.0 ],
 					"text" : "udpsend localhost 7000"
 				}
 
 			}
  ],
 		"lines" : [ 			{
+				"patchline" : 				{
+					"destination" : [ "obj-6", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-10", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-2", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-12", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-10", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-15", 0 ]
+				}
+
+			}
+, 			{
 				"patchline" : 				{
 					"destination" : [ "obj-14", 0 ],
 					"disabled" : 0,
@@ -158,6 +391,24 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-9", 1 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-2", 2 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-9", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-2", 2 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
 					"disabled" : 0,
 					"hidden" : 0,
@@ -165,8 +416,217 @@
 				}
 
 			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-12", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-6", 0 ]
+				}
+
+			}
  ],
-		"dependency_cache" : [  ]
+		"dependency_cache" : [ 			{
+				"name" : "sfPlayerBP.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/Modules/Players/sfPlayer",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/Modules/Players/sfPlayer",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "sfPlayer24.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "sampleUnitA.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "sfdata",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "sfTable",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "gainScale.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "flash2.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "parsePan.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "lineKH.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "MRrC.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "multiName_.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "multiNameNonZero.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "sliderTrack2.pct",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/picts",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/picts",
+				"type" : "PICT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "sliderKnob3.pct",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/picts",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/picts",
+				"type" : "PICT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "sfPlayerInfo.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "collFormat.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "collbuilder.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "moreAboutDataStructures.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "toggle10.pct",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/picts",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/picts",
+				"type" : "PICT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "loadSamples.pct",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/picts",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/picts",
+				"type" : "PICT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "bControl.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "largeGreen.pct",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/picts",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/picts",
+				"type" : "PICT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "muter.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "dragCollNew.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "buildSymbol.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "soundfilesNew.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/Modules/Players/sfPlayer/lib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "nTbp_.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "MRr_.maxpat",
+				"bootpath" : "/Users/jodispacek/Development/UBCToolbox_0.98/ubcLib",
+				"patcherrelativepath" : "../../../../Development/UBCToolbox_0.98/ubcLib",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "poly2.mxo",
+				"type" : "iLaX"
+			}
+ ]
 	}
 
 }
