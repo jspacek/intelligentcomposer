@@ -107,7 +107,7 @@ bool send(MotiveMatrix2D* MM) {
     
     p << osc::BeginBundleImmediate
     << osc::BeginMessage( "/dirTest3653" )
-    << MM->motive[0] << MM->motive[1] << osc::EndMessage
+    << MM->motive[0] << MM->motive[5] << MM->motive[10] << MM->motive[15] << osc::EndMessage
     << osc::EndBundle;
     
     transmitSocket.Send( p.Data(), p.Size() );
