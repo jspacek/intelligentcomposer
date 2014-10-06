@@ -30,6 +30,21 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
+					"frgb" : 0.0,
+					"id" : "obj-42",
+					"linecount" : 8,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 573.5, 95.5, 632.5, 127.0 ],
+					"text" : "TODO send back the rating from the assessment\n\nDURATION? WHat things are part of knowledge base and what is part of rendering (MAX) \n\nsections of piece can define the relative duraiton values. \n\nSAFE variations need supervision? \n\n"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
 					"id" : "obj-41",
 					"maxclass" : "number",
 					"numinlets" : 1,

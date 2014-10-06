@@ -8,10 +8,7 @@
          location = "group:knowledgebase"
          name = "knowledgebase">
          <FileRef
-            location = "group:knowledgebase">
-         </FileRef>
-         <FileRef
-            location = "group:knowledgebase.bin">
+            location = "group:ConstructMM.cpp">
          </FileRef>
          <FileRef
             location = "group:knowledgebase.cpp">

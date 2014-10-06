@@ -1,61 +1,59 @@
 //
-//  Created by jodi spacek on 2014-09-27.
-//
-//
+//  Initial input of a motive in 2D Matrix format
+//  that is used to generate variations on the motive
 //
 
 #include <iostream>
 
 using namespace std;
 
-// Constructs a Test Square 2x2 Matrix containing a motive on the diagonal
 class MotiveMatrix2D {
 public:
-    // N = number of rows and columns (a square matrix)
+    // N is the height
     int N;
+    // M is the width
+    int M;
     // Container for the motive consisting of directional values
-    int* motive;
+    int** matrix;
     
-    // Empty object
-    MotiveMatrix2D(int value){
-        N = value;
-        motive = new int[N*N];
+    // Instantiates a matrix with an empty matrix array that has
+    // been allocated memory in the order of N*M
+    MotiveMatrix2D(int n, int m) {
+        N = n;
+        M = m;
+        // Allocate space for the outer pointers
+        // (Casting to its actual type afterwards)
+        matrix = (int**) (malloc(N*sizeof(int*)));
+        
+        // Allocate space for each individual cell
+        for (int i=0;i<N;i++){
+            matrix[i] = (int*) malloc(M*(sizeof(int*)));
+        }
     }
     
-    MotiveMatrix2D(int dimension, int* dm){
-        N = dimension;
-        // For simplicity and speed, store the matrix into a 1-D array
-        motive = dm;
+    /*
+     Generates a 90deg rotation of this matrix and parses
+     the diagonal motive, compressing into an array
+     */
+    int* rotate() {
+        
+        int* anArray = new int[N];
+        anArray[0] = 6;
+        anArray[1] = 5;
+        anArray[2] = 4;
+        anArray[3] = 3;
+        return anArray;
+        
     }
-};
+    
+    int* compress() {
+        // Construct a path along the diagonal
+        int* anArray = new int[N];
+        anArray[0] = 6;
+        anArray[1] = 5;
+        anArray[2] = 4;
+        anArray[3] = 3;
+        return anArray;
 
-// Used for testing a matrix
-class TestMM {
-public:
-    // Test matrix motive for melody 3 - 6 - 5 - 3
-    MotiveMatrix2D* test3653 () {
-        int N = 4;
-        int* dm = new int[N*N];
-        
-        dm[0] = 3;//* Note 1
-        dm[1] = 4;
-        dm[2] = 4;
-        dm[3] = 6;
-        dm[4] = 1;
-        dm[5] = 6;//* Note 2
-        dm[6] = 6;
-        dm[7] = 4;
-        dm[8] = 2;
-        dm[9] = 5;
-        dm[10] = 5;//* Note 3
-        dm[11] = 5;
-        dm[12] = 7;
-        dm[13] = 7;
-        dm[14] = 7;
-        dm[15] = 3;//* Note 4
-        
-        MotiveMatrix2D* MM = new MotiveMatrix2D(N, dm);
-        
-        return MM;
     }
 };
