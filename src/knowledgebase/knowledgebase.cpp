@@ -3,7 +3,7 @@
 //
 //  Issues: May need to memory map knowledgebase.bin
 //
-// (1) Compile: g++ -Wall -Wextra -c -o send.o knowledgebase.cpp
+// (1) Compile: g++ -std=c++11 -Wall -c -o send.o knowledgebase.cpp
 // (2) Link: g++ -o bin/send oscpack_1_1_0/osc/OscTypes.o send.o oscpack_1_1_0/osc/OscOutboundPacketStream.o oscpack_1_1_0/ip/posix/UdpSocket.o
 //  oscpack_1_1_0/ip/IpEndpointName.o oscpack_1_1_0/ip/posix/NetworkingUtils.o
 //
@@ -119,15 +119,15 @@ bool send(int* cm, int N) {
 // Read, write, and send a test compressed motive
 int main () {
     ConstructMM* construct = new ConstructMM();
-    MotiveMatrix2D* m3653 = construct->motive3653();
-    int* cm = m3653->compress();
+    MotiveMatrix2D* m3653775 = construct->motive3653775();
+    CompressVariation* cm = m3653775->compress();
     
-    write(cm, m3653->N);
+    write(cm->melody, m3653775->N);
     
-    cm = read(0);
-
-    bool success = send(cm, m3653->N);
+    cm->melody = read(0);
+    // TODO SEnd the entire object to iterate
+    bool success = send(cm->melody, m3653775->N);
     delete construct;
-    delete m3653;
+    delete m3653775;
 }
 
