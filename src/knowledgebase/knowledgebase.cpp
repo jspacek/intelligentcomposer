@@ -23,39 +23,57 @@
 
 using namespace std;
 
+// User elects to write, read, or compose and send a motive to MAX MSP
+
+
+// Send the motive array to Max MSP
+void send(int* cm, int len) {
+    
+    UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, PORT ) );
+    
+    char buffer[OUTPUT_BUFFER_SIZE];
+    osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
+    cout << "--> ";
+    // TODO iterate through elements using len (hard coded to 7 elements)
+    p << osc::BeginBundleImmediate
+    << osc::BeginMessage( "/dirTest3653775" )
+    << cm[0] << cm[1] << cm[2] << cm[3] << cm[4] << cm[5] << cm[6]
+    << osc::EndMessage
+    << osc::EndBundle;
+    
+    transmitSocket.Send(p.Data(), p.Size());
+}
+
+// Compose a new motive and send it
+vector<pair<int,int>> compose(MotiveMatrix2D* matrix, vector<pair<int,int>> lastMP) {
+    
+    CompressVariation* cm = matrix->variation(lastMP);
+    send(cm->melody, cm->len);
+    
+    // return the varied path to create a modulation path
+    return cm->modifiedMP;
+}
+
 // SERIALIZE: Write the compressed array as a binary little endian record
 void write(int* cm, int len) {
     
     // Open the knowledge base to append to the file (never overwrite!)
     fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app);
-
+    
     if (file.is_open())
     {
-        // Expect a command of size 4
-        char* command = (char*) malloc(4*sizeof(char));
-        
-        // **** WRITE ****
-        while (1) {
-            printf("\nEnter command: ");
-            scanf ("%s", command);
-            // Check for exit command
-            if (strcmp(command, "exit") == 0)
-                break;
-            
-            if (strcmp(command, "save") == 0) {
-                file.write((char*) &len, sizeof(int));
-                for (int i = 0;i<len;i++) {
-                    file.write((char*) &cm[i], sizeof(int));
-                }
-            }
+        file.write((char*) &len, sizeof(int));
+        for (int i = 0;i<len;i++) {
+            file.write((char*) &cm[i], sizeof(int));
         }
+        
         file.close();
     } else {
         fprintf(stderr, "\nWrite: Error opening knowledgebase.bin\n\n");
         exit (1);
     }
-    
 }
+
 
 // DESERIALIZE: Read the compressed motive array from the binary file
 
@@ -66,10 +84,9 @@ int* read(int pos) {
     // Construct MM object
     fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app | ios::beg);
     int* cm;
-
+    
     if (file.is_open())
     {
-        cout << " file is open ";
         // Navigate to the first position in the file TODO use pos or search
         file.seekg (0, file.beg);
         
@@ -80,7 +97,6 @@ int* read(int pos) {
         
         // Read the data in as an array of size N
         int values[N];
-        cout << " read";
         
         file.read((char*)values, N*sizeof(int));
         for (int i=0;i<N;i++){
@@ -96,24 +112,25 @@ int* read(int pos) {
     return cm;
 }
 
-// Send the motive array to Max MSP
-bool send(int* cm, int N) {
-    
-    UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, PORT ) );
-    
-    char buffer[OUTPUT_BUFFER_SIZE];
-    osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
-    
-    // TODO LOOP
-    
-    p << osc::BeginBundleImmediate
-    << osc::BeginMessage( "/dirTest3653" )
-    << cm[0] << cm[1] << cm[2] << cm[3] << osc::EndMessage
-    << osc::EndBundle;
-    
-    transmitSocket.Send(p.Data(), p.Size());
-    
-    return true;
+// Handle user commands
+void control(MotiveMatrix2D* matrix) {
+    // Expect a command of max size 7
+    char* command = (char*) malloc(7*sizeof(char));
+    vector<pair<int,int>> lastMP;
+    // Loop user prompt until exit
+    while (1) {
+        printf("\nEnter command (exit / compose) ");
+        scanf ("%s", command);
+        // Check for exit command
+        if (strcmp(command, "exit") == 0)
+            break;
+        
+        if (strcmp(command, "compose") == 0) {
+            // Create a variation based on the last 
+            lastMP = compose(matrix, lastMP);
+        }
+    }
+    delete command;
 }
 
 // Read, write, and send a test compressed motive
@@ -122,12 +139,13 @@ int main () {
     MotiveMatrix2D* m3653775 = construct->motive3653775();
     CompressVariation* cm = m3653775->compress();
     
-    write(cm->melody, m3653775->N);
+    // Send the original compressed motive to Max
+    send(cm->melody, cm->len);
+    // Offer the user to compose a new motive
+    control(m3653775);
     
-    cm->melody = read(0);
-    // TODO SEnd the entire object to iterate
-    bool success = send(cm->melody, m3653775->N);
     delete construct;
+    delete cm;
     delete m3653775;
 }
 

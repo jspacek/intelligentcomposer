@@ -7,7 +7,7 @@
 			"revision" : 8
 		}
 ,
-		"rect" : [ 5.0, 62.0, 974.0, 610.0 ],
+		"rect" : [ 0.0, 44.0, 1280.0, 706.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -31,13 +31,27 @@
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"frgb" : 0.0,
-					"id" : "obj-42",
-					"linecount" : 8,
+					"id" : "obj-11",
+					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 573.5, 95.5, 632.5, 127.0 ],
-					"text" : "TODO send back the rating from the assessment\n\nDURATION? WHat things are part of knowledge base and what is part of rendering (MAX) \n\nsections of piece can define the relative duraiton values. \n\nSAFE variations need supervision? \n\n"
+					"patching_rect" : [ 8.0, 180.5, 80.0, 33.0 ],
+					"text" : "Remove motive name"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"frgb" : 0.0,
+					"id" : "obj-42",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 860.5, 27.0, 274.5, 20.0 ],
+					"text" : "TODO send back the rating from the assessment"
 				}
 
 			}
@@ -148,52 +162,10 @@
 					"id" : "obj-10",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
-					"numoutlets" : 5,
-					"outlettype" : [ "int", "int", "int", "int", "int" ],
-					"patching_rect" : [ 343.0, 174.0, 99.0, 20.0 ],
-					"text" : "unpack 0 0 0 0 0"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 12.0,
-					"frgb" : 0.0,
-					"id" : "obj-28",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 404.0, 270.0, 199.0, 20.0 ],
-					"text" : "Test Internal Messages"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 12.0,
-					"frgb" : 0.0,
-					"id" : "obj-27",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 63.5, 233.0, 632.5, 20.0 ],
-					"text" : "File Player Testing"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 12.0,
-					"frgb" : 0.0,
-					"id" : "obj-25",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 63.5, 270.0, 199.0, 20.0 ],
-					"text" : "Test Directly Connected Messages"
+					"numoutlets" : 7,
+					"outlettype" : [ "int", "int", "int", "int", "int", "int", "int" ],
+					"patching_rect" : [ 22.0, 141.0, 119.0, 20.0 ],
+					"text" : "unpack 0 0 0 0 0 0 0"
 				}
 
 			}
@@ -323,27 +295,12 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
-					"frgb" : 0.0,
-					"id" : "obj-8",
-					"linecount" : 2,
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 63.0, 27.0, 633.0, 33.0 ],
-					"text" : "These send to/ receive from the C++ oscpack tests in communication. Do not bind simulateneously on port 7000 (Max requires a change to the port to remove the binding."
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 12.0,
 					"id" : "obj-17",
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 141.0, 110.0, 57.0, 18.0 ],
+					"patching_rect" : [ 939.5, 95.0, 57.0, 18.0 ],
 					"text" : "/test1 44"
 				}
 
@@ -356,7 +313,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 408.0, 143.0, 189.0, 21.0 ],
+					"patching_rect" : [ 22.0, 89.0, 189.0, 21.0 ],
 					"text" : "print receivedmess @popup 1"
 				}
 
@@ -370,7 +327,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 408.0, 110.0, 99.0, 20.0 ],
+					"patching_rect" : [ 22.0, 56.0, 99.0, 20.0 ],
 					"text" : "udpreceive 7000"
 				}
 
@@ -384,8 +341,8 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 408.0, 71.0, 230.0, 20.0 ],
-					"text" : "Receive a message from OCP Test Send"
+					"patching_rect" : [ 22.0, 17.0, 230.0, 20.0 ],
+					"text" : "Receive a motive note list"
 				}
 
 			}
@@ -398,7 +355,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 62.0, 71.0, 215.0, 20.0 ],
+					"patching_rect" : [ 860.5, 56.0, 215.0, 20.0 ],
 					"text" : "Send a message to OCP Test Receive"
 				}
 
@@ -412,7 +369,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 69.0, 110.0, 50.0, 18.0 ],
+					"patching_rect" : [ 867.5, 95.0, 50.0, 18.0 ],
 					"text" : "/test 44"
 				}
 
@@ -425,7 +382,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 69.0, 143.0, 137.0, 20.0 ],
+					"patching_rect" : [ 867.5, 128.0, 137.0, 20.0 ],
 					"text" : "udpsend localhost 7000"
 				}
 
