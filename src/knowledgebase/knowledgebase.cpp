@@ -18,18 +18,19 @@
 #include <oscpack/ip/UdpSocket.h>
 
 #define ADDRESS "127.0.0.1"
-#define PORT 7000
+#define SEND_PORT 7000
+#define RECV_PORT 7001
+
 #define OUTPUT_BUFFER_SIZE 1024
 
 using namespace std;
 
-// User elects to write, read, or compose and send a motive to MAX MSP
-
+// User elects to write, read, receive, or compose and send a motive to MAX MSP
 
 // Send the motive array to Max MSP
 void send(int* cm, int len) {
     
-    UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, PORT ) );
+    UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, SEND_PORT ) );
     
     char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
@@ -37,7 +38,7 @@ void send(int* cm, int len) {
     // TODO iterate through elements using len (hard coded to 7 elements)
     p << osc::BeginBundleImmediate
     << osc::BeginMessage( "/dirTest3653775" )
-    << cm[0] << cm[1] << cm[2] << cm[3] << cm[4] << cm[5] << cm[6]
+    << cm[0] << cm[1] << cm[2] << cm[3] << cm[4] << cm[5] << cm[6] << cm[7] << cm[8] << cm[9] << cm[10] << cm[11]
     << osc::EndMessage
     << osc::EndBundle;
     
@@ -136,16 +137,16 @@ void control(MotiveMatrix2D* matrix) {
 // Read, write, and send a test compressed motive
 int main () {
     ConstructMM* construct = new ConstructMM();
-    MotiveMatrix2D* m3653775 = construct->motive3653775();
-    CompressVariation* cm = m3653775->compress();
+    MotiveMatrix2D* m = construct->motive1();
+    CompressVariation* cm = m->compress();
     
     // Send the original compressed motive to Max
     send(cm->melody, cm->len);
     // Offer the user to compose a new motive
-    control(m3653775);
+    control(m);
     
     delete construct;
     delete cm;
-    delete m3653775;
+    delete m;
 }
 

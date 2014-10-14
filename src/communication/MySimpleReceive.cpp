@@ -2,6 +2,7 @@
     Example of two different ways to process received OSC messages using oscpack.
     Receives the messages from the SimpleSend.cpp example.
  
+ Compile: g++ -Wall -Wextra -c -o MySimpleReceive.o MySimpleReceive.cpp
  
  Link with: 
  
@@ -22,7 +23,7 @@ using ::__strcmp__;  // avoid error: E2316 '__strcmp__' is not a member of 'std'
 #include <oscpack/osc/OscPacketListener.h>
 #include <oscpack/ip/UdpSocket.h>
 
-#define PORT 7000
+#define PORT 7001
 
 class ExamplePacketListener : public osc::OscPacketListener {
 protected:
@@ -32,22 +33,20 @@ protected:
     {
         (void) remoteEndpoint; // suppress unused parameter warning
 
-        try{
+        try {
             // Check for the type of message
-            if( std::strcmp( m.AddressPattern(), "/dirMatrix4" ) == 0 ){
-                // We received a direction Matrix with width = 4
-                // TODO adapt this to accept any sized argument
+            if ( std::strcmp( m.AddressPattern(), "/rate" ) == 0 ){
+                // Receive a rating
+                // TODO how to associate the variation
                 osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
                 osc::int32 a1;
-                osc::int32 a2;
-                osc::int32 a3;
-                osc::int32 a4;
-                args >> a1 >> a2 >> a3 >> a4 >> osc::EndMessage;
+
+                args >> a1 >> osc::EndMessage;
                 
-                std::cout << "received '/dirMatrix4' message with arguments: "
-                    << a1 << " " << a2 << " " << a3 << " " << a4 << "\n";
+                std::cout << "received '/rate' message with rating = "
+                    << a1 << "\n";
                 
-            }else if( std::strcmp( m.AddressPattern(), "/stop" ) == 0 ){
+            } else if( std::strcmp( m.AddressPattern(), "/stop" ) == 0 ){
                 // example #2 -- argument iterator interface, supports
                 // reflection for overloaded messages (eg you can call 
                 // (*arg)->IsBool() to check if a bool was passed etc).
@@ -60,7 +59,7 @@ protected:
                 std::cout << "received '/stop' message with arguments: "
                     << a1 << "\n";
             }
-        }catch( osc::Exception& e ){
+        } catch( osc::Exception& e ){
             // any parsing errors such as unexpected argument types, or 
             // missing arguments get thrown as exceptions.
             std::cout << "error while parsing message: "
