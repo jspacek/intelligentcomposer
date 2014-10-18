@@ -7,14 +7,24 @@
       <Group
          location = "group:knowledgebase"
          name = "knowledgebase">
+         <Group
+            location = "group:bin"
+            name = "bin">
+            <FileRef
+               location = "group:knowledgebase.bin">
+            </FileRef>
+            <FileRef
+               location = "group:send">
+            </FileRef>
+         </Group>
          <FileRef
-            location = "group:ConstructMM.cpp">
+            location = "group:Control.cpp">
          </FileRef>
          <FileRef
-            location = "group:knowledgebase.cpp">
+            location = "group:MotiveMatrix.cpp">
          </FileRef>
          <FileRef
-            location = "group:MotiveMatrix2D.cpp">
+            location = "group:MotiveVariation.cpp">
          </FileRef>
          <Group
             location = "group:oscpack_1_1_0"

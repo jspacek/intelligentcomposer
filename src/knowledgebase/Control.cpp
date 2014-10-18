@@ -12,8 +12,8 @@
 #include <string.h>
 #include <iostream>
 #include <fstream>
-#include "MotiveMatrix2D.cpp"
-#include "ConstructMM.cpp"
+#include "MotiveMatrix.cpp"
+#include "MotiveVariation.cpp"
 #include <oscpack/osc/OscOutboundPacketStream.h>
 #include <oscpack/ip/UdpSocket.h>
 
@@ -35,7 +35,7 @@ void send(int* cm, int len) {
     char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
     cout << "--> ";
-    // TODO iterate through elements using len (hard coded to 7 elements)
+    // TODO iterate through elements using len not hard coded
     p << osc::BeginBundleImmediate
     << osc::BeginMessage( "/dirTest3653775" )
     << cm[0] << cm[1] << cm[2] << cm[3] << cm[4] << cm[5] << cm[6] << cm[7] << cm[8] << cm[9] << cm[10] << cm[11]
@@ -46,13 +46,24 @@ void send(int* cm, int len) {
 }
 
 // Compose a new motive and send it
-vector<pair<int,int>> compose(MotiveMatrix2D* matrix, vector<pair<int,int>> lastMP) {
+void compose(MotiveMatrix* mm, MotiveVariation* mv) {
     
-    CompressVariation* cm = matrix->variation(lastMP);
+    CompressVariation* cm = mv->variation(mm);
     send(cm->melody, cm->len);
     
     // return the varied path to create a modulation path
-    return cm->modifiedMP;
+    delete cm;
+}
+
+// Compress the original melody and send it
+void original(MotiveMatrix* mm, MotiveVariation* mv) {
+
+    CompressVariation* cm = mv->compress(mm->path, mm);
+
+    // Send the original compressed motive to Max
+    send(cm->melody, cm->len);
+    
+    delete cm;
 }
 
 // SERIALIZE: Write the compressed array as a binary little endian record
@@ -114,10 +125,9 @@ int* read(int pos) {
 }
 
 // Handle user commands
-void control(MotiveMatrix2D* matrix) {
+void control(MotiveMatrix* mm, MotiveVariation* mv) {
     // Expect a command of max size 7
     char* command = (char*) malloc(7*sizeof(char));
-    vector<pair<int,int>> lastMP;
     // Loop user prompt until exit
     while (1) {
         printf("\nEnter command (exit / compose) ");
@@ -126,9 +136,13 @@ void control(MotiveMatrix2D* matrix) {
         if (strcmp(command, "exit") == 0)
             break;
         
-        if (strcmp(command, "compose") == 0) {
+        if (strcmp(command, "cmp") == 0) {
             // Create a variation based on the last 
-            lastMP = compose(matrix, lastMP);
+            compose(mm, mv);
+        } else if (strcmp(command, "orig") == 0) {
+            // Send the original motive
+            original(mm, mv);
+           
         }
     }
     delete command;
@@ -136,17 +150,13 @@ void control(MotiveMatrix2D* matrix) {
 
 // Read, write, and send a test compressed motive
 int main () {
-    ConstructMM* construct = new ConstructMM();
-    MotiveMatrix2D* m = construct->motive1();
-    CompressVariation* cm = m->compress();
+    MotiveMatrix* mm = new MotiveMatrix();
+    MotiveVariation* mv = new MotiveVariation();
+
+    // Generate options to the user
+    control(mm, mv);
     
-    // Send the original compressed motive to Max
-    send(cm->melody, cm->len);
-    // Offer the user to compose a new motive
-    control(m);
-    
-    delete construct;
-    delete cm;
-    delete m;
+    delete mm;
+    delete mv;
 }
 
