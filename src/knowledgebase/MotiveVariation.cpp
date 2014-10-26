@@ -92,24 +92,49 @@ public:
      next interval being positive or negative. If the interval value is 0,
      the note is repeated and is not part of the average calculation.
      
+     Average has a history of 5 intervals, weighted at 5, 10, 20, 30, and 35.
+     
      *********************************************************************/
-    
-    int* selectMelody(int pathLength, vector<pair<int,int>> mp, int** mm) {
+    int* selectMelody(int pathLength, vector<pair<int,int>> mp, MotiveMatrix* mm) {
         // Construct an array of interval values
         int* melody = new int[pathLength];
-        // Seed value for weighted average in percent
-        int weightedMovingAverage = rand() % 100;
-        
+        // Set balanced values for calculation
+        melody[0] = -1;
+        melody[1] = -1;
+        melody[2] = 0;
+        melody[3] = -1;
+        melody[4] = 1;
+        // Store the probability of a positive or negative interval
+        int probability = 0;
+        int i = 0;
+        int j = 0;
+        cout << " Melody Selection ";
         // Loop around the matrix to select interval values
         // then use weighted moving average to determine if
         // positive, negative or equal
-        
-        for (int i=0;i<pathLength;i++) {
+        for (auto it = begin (mp); it != end (mp); ++it) {
+            // Modify counter if within 5 elements of the beginning
+            if (i < 4) j = 4;
+            else j = i-1;
+            //cout << " j = " << j << " i = " << i;
+            //cout << " calculated values are " << melody[j] << " " << melody[j-1]<< " "  << melody[j-2]<< " "  << melody[j-3]<< " "  << melody[j-4];
+            probability = melody[j] + melody[j-1] + melody[j-2] + melody[j-3] + melody[j-4];
+            //remove historic weighting, as it is slanted towards positive
+            // 5*melody[i] + 10*melody[i+1] + 15*melody[i+2] + 20*melody[i+3] + 25*melody[i+4];
+            cout << "\n probablity = " << probability;
+            if (probability == 0){
+                // If perfectly balanced, select a random direction
+                probability = rand() % 2 + 1;
+                if (probability == 1) probability = -1;
+                cout << "\n chance probablity = " << probability;
+            }
             
+            if (probability < 0) melody[i] = mm->matrix[it->first][it->second];
+            else if (probability > 0) melody[i] = -1 * mm->matrix[it->first][it->second];
             
-            
+            cout << " interval = " << melody[i] << " ";
+            i++;
         }
-        
         return melody;
     }
 };

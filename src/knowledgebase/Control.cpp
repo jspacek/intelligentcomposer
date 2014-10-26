@@ -47,14 +47,16 @@ void send(int* cm, int len) {
 
 // Compose a new motive and send it
 void compose(MotiveMatrix* mm, MotiveVariation* mv) {
-    
-    vector<pair<int,int>> mp = mv->selectPath(12, mm);
+    // TODO path length
+    vector<pair<int,int>> mp = mv->selectPath(50, mm);
     cout << " Path is ";
     
     for (auto it = begin (mp); it != end (mp); ++it) {
        cout << " (" << it->first << ", " << it->second << ") ";
     }
 
+    int* melody = mv->selectMelody(50, mp, mm);
+    
     // TODO send(cm->melody, cm->len);    
 }
 
