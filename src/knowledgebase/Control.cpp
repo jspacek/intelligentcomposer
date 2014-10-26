@@ -3,7 +3,7 @@
 //
 //  Issues: May need to memory map knowledgebase.bin
 //
-// (1) Compile: g++ -std=c++11 -Wall -c -o send.o knowledgebase.cpp
+// (1) Compile: g++ -std=c++11 -Wall -c -o send.o Control.cpp
 // (2) Link: g++ -o bin/send oscpack_1_1_0/osc/OscTypes.o send.o oscpack_1_1_0/osc/OscOutboundPacketStream.o oscpack_1_1_0/ip/posix/UdpSocket.o
 //  oscpack_1_1_0/ip/IpEndpointName.o oscpack_1_1_0/ip/posix/NetworkingUtils.o
 //
@@ -48,22 +48,14 @@ void send(int* cm, int len) {
 // Compose a new motive and send it
 void compose(MotiveMatrix* mm, MotiveVariation* mv) {
     
-    CompressVariation* cm = mv->variation(mm);
-    send(cm->melody, cm->len);
+    vector<pair<int,int>> mp = mv->selectPath(12, mm);
+    cout << " Path is ";
     
-    // return the varied path to create a modulation path
-    delete cm;
-}
+    for (auto it = begin (mp); it != end (mp); ++it) {
+       cout << " (" << it->first << ", " << it->second << ") ";
+    }
 
-// Compress the original melody and send it
-void original(MotiveMatrix* mm, MotiveVariation* mv) {
-
-    CompressVariation* cm = mv->compress(mm->path, mm);
-
-    // Send the original compressed motive to Max
-    send(cm->melody, cm->len);
-    
-    delete cm;
+    // TODO send(cm->melody, cm->len);    
 }
 
 // SERIALIZE: Write the compressed array as a binary little endian record
@@ -139,10 +131,8 @@ void control(MotiveMatrix* mm, MotiveVariation* mv) {
         if (strcmp(command, "cmp") == 0) {
             // Create a variation based on the last 
             compose(mm, mv);
-        } else if (strcmp(command, "orig") == 0) {
-            // Send the original motive
-            original(mm, mv);
-           
+        } else {
+            cout << "Command not recognized";
         }
     }
     delete command;

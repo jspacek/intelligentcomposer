@@ -1,15 +1,13 @@
-//
-//  Initial input of a motive in 2D Matrix format
-//  that is used to generate variations on the motive
-//
+
 #include <vector>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
-//
-// Compressed variation of a motive matrix, that is the motive path (melody)
-//
+/**
+*   Compressed variation of a motive matrix, that is the motive path (melody)
+**/
 class CompressVariation {
 public:
     
@@ -29,100 +27,89 @@ public:
 class MotiveVariation {
 public:
     
-    /************ Rules for motive path traversal **************
+    /************ Motive Path Traversal *********************************
      
-        3 Bit vectors store previous direction choices.
-        A direction can be either positive or negative (or 0, oh no!).
-        A path can move L-R horizontally, or L-R diagonally.
-        The default move is a straight move forward along y-coor.
+     A path can move L-R horizontally, or L-R diagonally.
+     Using rand gen seed values in the bit vectors, the combinations are
      
-     ***********************************************************/
-    
-    // Bit vector stores previous neg/pos interval values
-    unsigned int signBV;
-    // Bit vector stores previous left/right diagonal direction choices
-    unsigned int diagonalBV;
-    // Bit vector stores previous left/right across direction choices
-    unsigned int sidewaysBV;
-    
-    /*
-     Selects a motive path through the matrix based on historic choices
-     */
-    vector<pair<int,int>> selectPath(int lengthPath, MotiveMatrix* mm) {
+     diagonalBV      leftRightBV
+        0               0           Move Left
+        0               1           Move Right
+        1               0           Move Left Diagonal
+        1               1           Move Right Diagonal
+     
+     ********************************************************************/
+
+    vector<pair<int,int>> selectPath(int pathLength, MotiveMatrix* mm) {
         
-        // Assign a random starting seed value for both note selection
-        // TODO and matrix path directions
         vector<pair<int,int>> mp;
+        // Set the path max value for the traversal bit vectors
+        int bitLength = pow (2.0, pathLength);
         
-        // TODO check bounds with the matrix
+        // Initialize seed values for path traversal
+        unsigned int leftRightBV = rand() % bitLength;
+        unsigned int diagonalBV = rand() % bitLength;
+        // Start anywhere in the matrix
+        int x = rand() % mm->N;
+        int y = rand() % mm->M;
         
-        if (signBV == 0) {
-            signBV = 2;
+        // Bit manipulation to determine traversal steps
+        for (int i=0;i<pathLength;i++) {
+            // Determine x coordinate step
+            if ((leftRightBV >> i) & 1) {
+                // Move right if within boundary N
+                if (x+1 < mm->N) x++;
+                // Otherwise, move left
+                else x--;
+            } else {
+                // Move left if x-1 >= 0
+                if (x-1>0) x--;
+                else x++;
+            }
+            // Determine diagonal move in y-coor
+            if ((diagonalBV >> i) & 1) {
+                // Move up if within boundary M
+                if (y+1 < mm->M) y++;
+                // Otherwise, move down
+                else y--;
+            }
+            // Add the next step coordinates to the vector
+            mp.push_back(make_pair(x, y));
         }
-        signBV = 6;
-
-        // Check the last choice made, give it weighting 5
-        if (signBV & 1) {
-            // the last choice made was positive
-            cout << " last choice positive ";
-            
-        }
-        if ((signBV >> 1) & 1 ){
-            // the second-to-last choice made was positive
-            cout << " second to last choice positive ";
-
-        }
-        if ((signBV >> 2) & 1 ){
-            // third-to-last choice made was positive
-            cout << " third to last choice positive ";
-            
-        }
-        // TODO return a dummy version for now
-        mp =  {
-            {0, 0},
-            {1, 1},
-            {2, 2},
-            {2, 4},
-            {2, 6},
-            {3, 3},
-            {3, 5},
-            {4, 0},
-            {4, 4},
-            {5, 0},
-            {5, 5},
-            {6, 10},
-            {6, 15}
-        };
+        
         return mp;
     }
     
-    /*
-     Compress without variation
-     */
-    CompressVariation* compress(vector<pair<int,int>> mp, MotiveMatrix* mm) {
-        int len = 0;
-        int* melody = new int[mp.size()];
-        cout << "  { ";
-        // Parse motivic elements from the matrix
-        for (auto it = begin (mp); it != end (mp); ++it) {
-            cout << " (" << it->first << ", " << it->second << ") ";
-            melody[len] = mm->matrix[it->first][it->second];
-            len++;
-        }
-        len++;
-        cout << " }";
-        CompressVariation* cv = new CompressVariation(len, melody);
-        
-        return cv;
-    }
+    // TODO SELECT STRAIGHT PATH
+
     
-    /*
-     Return a compressed melody that is a variation of the original
-     */
-    CompressVariation* variation(MotiveMatrix* mm) {
-        //default path to 12 for now
-        vector<pair<int,int>> mp = selectPath(12, mm);
-        CompressVariation* cv = compress(mp, mm);
-        return cv;
+    /************ Weighted Moving Average calculation ********************
+     
+     An interval can be either zero, positive or negative, and
+     it can have a max size of 8.
+     
+     A weighted moving average is used to determine the likelihood of the
+     next interval being positive or negative. If the interval value is 0,
+     the note is repeated and is not part of the average calculation.
+     
+     *********************************************************************/
+    
+    int* selectMelody(int pathLength, vector<pair<int,int>> mp, int** mm) {
+        // Construct an array of interval values
+        int* melody = new int[pathLength];
+        // Seed value for weighted average in percent
+        int weightedMovingAverage = rand() % 100;
+        
+        // Loop around the matrix to select interval values
+        // then use weighted moving average to determine if
+        // positive, negative or equal
+        
+        for (int i=0;i<pathLength;i++) {
+            
+            
+            
+        }
+        
+        return melody;
     }
 };
