@@ -99,7 +99,7 @@ public:
         // Construct an array of interval values
         int* melody = new int[pathLength];
         // Set balanced values for calculation
-        melody[0] = -1;
+        melody[0] = 1;
         melody[1] = -1;
         melody[2] = 0;
         melody[3] = -1;
@@ -108,7 +108,7 @@ public:
         int probability = 0;
         int i = 0;
         int j = 0;
-        cout << " Melody Selection ";
+        cout << "\n Melody Selection ";
         // Loop around the matrix to select interval values
         // then use weighted moving average to determine if
         // positive, negative or equal
@@ -116,11 +116,11 @@ public:
             // Modify counter if within 5 elements of the beginning
             if (i < 4) j = 4;
             else j = i-1;
-            //cout << " j = " << j << " i = " << i;
-            //cout << " calculated values are " << melody[j] << " " << melody[j-1]<< " "  << melody[j-2]<< " "  << melody[j-3]<< " "  << melody[j-4];
             probability = melody[j] + melody[j-1] + melody[j-2] + melody[j-3] + melody[j-4];
-            //remove historic weighting, as it is slanted towards positive
-            // 5*melody[i] + 10*melody[i+1] + 15*melody[i+2] + 20*melody[i+3] + 25*melody[i+4];
+            
+            // These favour the positive side of the melody
+            //melody[i] + melody[i+1] + melody[i+2] + melody[i+3] + melody[i+4];
+            //5*melody[i] + 10*melody[i+1] + 15*melody[i+2] + 20*melody[i+3] + 25*melody[i+4];
             cout << "\n probablity = " << probability;
             if (probability == 0){
                 // If perfectly balanced, select a random direction

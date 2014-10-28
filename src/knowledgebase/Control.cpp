@@ -24,23 +24,24 @@
 #define OUTPUT_BUFFER_SIZE 1024
 
 using namespace std;
+static int id;
 
 // User elects to write, read, receive, or compose and send a motive to MAX MSP
 
 // Send the motive array to Max MSP
-void send(int* cm, int len) {
+void send(int id, int* melody, int len) {
     
     UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, SEND_PORT ) );
     
     char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
-    cout << "--> ";
-    // TODO iterate through elements using len not hard coded
+    cout << "  --> ";
     p << osc::BeginBundleImmediate
-    << osc::BeginMessage( "/dirTest3653775" )
-    << cm[0] << cm[1] << cm[2] << cm[3] << cm[4] << cm[5] << cm[6] << cm[7] << cm[8] << cm[9] << cm[10] << cm[11]
-    << osc::EndMessage
-    << osc::EndBundle;
+    << osc::BeginMessage( "/dirId" ) << id;
+    for (int i = 0;i<len;i++) {
+        p << melody[i];
+    }
+    p << osc::EndMessage << osc::EndBundle;
     
     transmitSocket.Send(p.Data(), p.Size());
 }
@@ -48,16 +49,16 @@ void send(int* cm, int len) {
 // Compose a new motive and send it
 void compose(MotiveMatrix* mm, MotiveVariation* mv) {
     // TODO path length
-    vector<pair<int,int>> mp = mv->selectPath(50, mm);
+    vector<pair<int,int>> mp = mv->selectPath(13, mm);
     cout << " Path is ";
     
     for (auto it = begin (mp); it != end (mp); ++it) {
        cout << " (" << it->first << ", " << it->second << ") ";
     }
 
-    int* melody = mv->selectMelody(50, mp, mm);
+    int* melody = mv->selectMelody(13, mp, mm);
     
-    // TODO send(cm->melody, cm->len);    
+    send(id++, melody, 13);
 }
 
 // SERIALIZE: Write the compressed array as a binary little endian record
