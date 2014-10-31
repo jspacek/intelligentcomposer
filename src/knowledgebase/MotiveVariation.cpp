@@ -105,7 +105,7 @@ public:
         melody[3] = -1;
         melody[4] = 1;
         // Store the probability of a positive or negative interval
-        int probability = 0;
+        int history = 0;
         int i = 0;
         int j = 0;
         cout << "\n Melody Selection ";
@@ -114,25 +114,37 @@ public:
         // positive, negative or equal
         for (auto it = begin (mp); it != end (mp); ++it) {
             // Modify counter if within 5 elements of the beginning
-            if (i < 4) j = 4;
-            else j = i-1;
-            probability = melody[j] + melody[j-1] + melody[j-2] + melody[j-3] + melody[j-4];
+            if (i < 5) j = 4;
+            else j = i;
+            //probability = melody[j] + melody[j-1] + melody[j-2] + melody[j-3] + melody[j-4];
+            //probability = 5*melody[j] + 10*melody[j-1] + 20*melody[j-2] + 30*melody[j-3] + 35*melody[j-4];
+            history = 5*melody[j-3] + 10*melody[j-2] + 50*melody[j-1];
             
-            // These favour the positive side of the melody
-            //melody[i] + melody[i+1] + melody[i+2] + melody[i+3] + melody[i+4];
-            //5*melody[i] + 10*melody[i+1] + 15*melody[i+2] + 20*melody[i+3] + 25*melody[i+4];
-            cout << "\n probablity = " << probability;
-            if (probability == 0){
+            // amount to shift center position
+            cout << "\n ***** history = " << history;
+            /*if (probability == 0){
                 // If perfectly balanced, select a random direction
                 probability = rand() % 2 + 1;
                 if (probability == 1) probability = -1;
                 cout << "\n chance probablity = " << probability;
-            }
+            }*/
+            // if random is > prob
+            int random = 50 + history*.15;
             
-            if (probability < 0) melody[i] = mm->matrix[it->first][it->second];
-            else if (probability > 0) melody[i] = -1 * mm->matrix[it->first][it->second];
             
-            cout << " interval = " << melody[i] << " ";
+            if (random < 5 ) random = 5;
+            else if (random > 99) random = 99;
+            cout << " \nrandom = " << random;
+
+            
+            int r = rand() % 100;
+            cout << "\n r  " << r;
+            
+            // TODO range check if < 0
+            if (r > random) melody[i] = mm->matrix[it->first][it->second];
+            else if (r <= random) melody[i] = -1 * mm->matrix[it->first][it->second];
+            
+            cout << " interval = " << melody[i] << " ***********";
             i++;
         }
         return melody;

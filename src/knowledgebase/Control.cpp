@@ -125,10 +125,10 @@ void control(MotiveMatrix* mm, MotiveVariation* mv) {
     char* command = (char*) malloc(7*sizeof(char));
     // Loop user prompt until exit
     while (1) {
-        printf("\nEnter command (exit / compose) ");
+        printf("\nEnter command (x = exit / cmp = compose) ");
         scanf ("%s", command);
         // Check for exit command
-        if (strcmp(command, "exit") == 0)
+        if (strcmp(command, "x") == 0)
             break;
         
         if (strcmp(command, "cmp") == 0) {
