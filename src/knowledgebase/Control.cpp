@@ -5,7 +5,7 @@
 //
 // (1) Compile: g++ -std=c++11 -Wall -c -o send.o Control.cpp
 // (2) Link: g++ -o bin/send oscpack_1_1_0/osc/OscTypes.o send.o oscpack_1_1_0/osc/OscOutboundPacketStream.o oscpack_1_1_0/ip/posix/UdpSocket.o
-//  oscpack_1_1_0/ip/IpEndpointName.o oscpack_1_1_0/ip/posix/NetworkingUtils.o
+//  oscpack_1_1_0/ip/IpEndpointName.o oscpack_1_1_0/ip/posix/NetworkingUtils.o oscpack_1_1_0/osc/OscReceivedElements.o
 //
 //
 
@@ -14,8 +14,12 @@
 #include <fstream>
 #include "MotiveMatrix.cpp"
 #include "MotiveVariation.cpp"
+#include "RatingListener.cpp"
+
 #include <oscpack/osc/OscOutboundPacketStream.h>
+#include <oscpack/osc/OscReceivedElements.h>
 #include <oscpack/ip/UdpSocket.h>
+
 
 #define ADDRESS "127.0.0.1"
 #define SEND_PORT 7000
@@ -46,6 +50,19 @@ void send(int id, int* melody, int len) {
     transmitSocket.Send(p.Data(), p.Size());
 }
 
+void listen() {
+    
+    RatingListener listener;
+    UdpListeningReceiveSocket s(IpEndpointName( IpEndpointName::ANY_ADDRESS, RECV_PORT ),
+                                &listener );
+    
+    std::cout << "press ctrl-c to end\n";
+    
+    s.RunUntilSigInt();
+    
+    
+}
+
 // Compose a new motive and send it
 void compose(MotiveMatrix* mm, MotiveVariation* mv) {
     // TODO path length
@@ -53,71 +70,14 @@ void compose(MotiveMatrix* mm, MotiveVariation* mv) {
     cout << " Path is ";
     
     for (auto it = begin (mp); it != end (mp); ++it) {
-       cout << " (" << it->first << ", " << it->second << ") ";
+        cout << " (" << it->first << ", " << it->second << ") ";
     }
-
+    
     int* melody = mv->selectMelody(13, mp, mm);
     
     send(id++, melody, 13);
 }
 
-// SERIALIZE: Write the compressed array as a binary little endian record
-void write(int* cm, int len) {
-    
-    // Open the knowledge base to append to the file (never overwrite!)
-    fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app);
-    
-    if (file.is_open())
-    {
-        file.write((char*) &len, sizeof(int));
-        for (int i = 0;i<len;i++) {
-            file.write((char*) &cm[i], sizeof(int));
-        }
-        
-        file.close();
-    } else {
-        fprintf(stderr, "\nWrite: Error opening knowledgebase.bin\n\n");
-        exit (1);
-    }
-}
-
-
-// DESERIALIZE: Read the compressed motive array from the binary file
-
-// TODO: Scan through different positions in fixed format records (use variable pos)
-int* read(int pos) {
-    
-    // Open the knowledge base to append to the file, and to read binary data
-    // Construct MM object
-    fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app | ios::beg);
-    int* cm;
-    
-    if (file.is_open())
-    {
-        // Navigate to the first position in the file TODO use pos or search
-        file.seekg (0, file.beg);
-        
-        int N = 0;
-        file.read((char *) &N, sizeof(N));
-        cm = new int[N];
-        cout << " Size of array written was " << N << "\n";
-        
-        // Read the data in as an array of size N
-        int values[N];
-        
-        file.read((char*)values, N*sizeof(int));
-        for (int i=0;i<N;i++){
-            cout << "  Element [" << i << "] = " << values[i];
-            cm[i] = values[i];
-        }
-    } else {
-        fprintf(stderr, "\nRead: Error opening knowledgebase.bin\n\n");
-        exit (1);
-    }
-    file.close();
-    
-    return cm;
-}
 
 // Handle user commands
 void control(MotiveMatrix* mm, MotiveVariation* mv) {
@@ -125,27 +85,29 @@ void control(MotiveMatrix* mm, MotiveVariation* mv) {
     char* command = (char*) malloc(7*sizeof(char));
     // Loop user prompt until exit
     while (1) {
-        printf("\nEnter command (x = exit / cmp = compose) ");
+        printf("\nEnter command (x = exit / c = compose / l = listen) ");
         scanf ("%s", command);
         // Check for exit command
         if (strcmp(command, "x") == 0)
-            break;
+        break;
         
-        if (strcmp(command, "cmp") == 0) {
-            // Create a variation based on the last 
+        if (strcmp(command, "c") == 0) {
+            // Create a variation based on the last
             compose(mm, mv);
+        } else if (strcmp(command, "l") == 0) {
+            // Listen for a rating
+            listen();
         } else {
             cout << "Command not recognized";
         }
     }
     delete command;
 }
-
 // Read, write, and send a test compressed motive
 int main () {
     MotiveMatrix* mm = new MotiveMatrix();
     MotiveVariation* mv = new MotiveVariation();
-
+    
     // Generate options to the user
     control(mm, mv);
     

@@ -10,9 +10,16 @@
          <Group
             location = "group:bin"
             name = "bin">
-            <FileRef
-               location = "group:knowledgebase.bin">
-            </FileRef>
+            <Group
+               location = "group:"
+               name = "">
+               <FileRef
+                  location = "group:knowledgebase.bin">
+               </FileRef>
+               <FileRef
+                  location = "group:send">
+               </FileRef>
+            </Group>
             <FileRef
                location = "group:send">
             </FileRef>
@@ -232,6 +239,9 @@
                location = "group:TODO">
             </FileRef>
          </Group>
+         <FileRef
+            location = "group:RatingListener.cpp">
+         </FileRef>
       </Group>
       <Group
          location = "group:communication"
