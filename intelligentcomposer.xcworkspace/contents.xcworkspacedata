@@ -10,16 +10,6 @@
          <Group
             location = "group:bin"
             name = "bin">
-            <Group
-               location = "group:"
-               name = "">
-               <FileRef
-                  location = "group:knowledgebase.bin">
-               </FileRef>
-               <FileRef
-                  location = "group:send">
-               </FileRef>
-            </Group>
             <FileRef
                location = "group:send">
             </FileRef>

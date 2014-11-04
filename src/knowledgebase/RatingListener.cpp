@@ -43,10 +43,11 @@ class RatingListener : public osc::OscPacketListener {
                 // Receive a rating
                 osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
                 osc::int32 id;
+                osc::int32 finality;
                 osc::int32 r;
                 osc::int32 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18;
                 
-                args >> id >> r >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8 >> a9 >> a10 >> a11 >> a12 >> a13 >> a14 >> a15 >> a16 >> a17 >> a18 >> osc::EndMessage;
+                args >> id >> finality >> r >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8 >> a9 >> a10 >> a11 >> a12 >> a13 >> a14 >> a15 >> a16 >> a17 >> a18 >> osc::EndMessage;
                 
                 ratingID = id;
                 rating = r;
@@ -71,14 +72,23 @@ class RatingListener : public osc::OscPacketListener {
                 intervals[16] = a17;
                 intervals[17] = a18;
                 
-                std::cout << "received '/rate' message with id " << ratingID << " rating = " << rating
+                std::cout << "received '/rate' message with id " << ratingID << " finality = " << finality << " rating = " << rating
                 << " and a1 = " << a1 << " a18 = " << a18 << "\n";
                 
-                write(ratingID, intervals, 1, 18);
+                write(ratingID, intervals, finality, rating);
                 
-                // now read it back for testing
                 
-                read(1);
+            } else if( std::strcmp( m.AddressPattern(), "/read" ) == 0 ){
+                
+                osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
+                
+                osc::int32 a1;
+                osc::int32 a2;
+                args >> a1 >> a2 >> osc::EndMessage;
+                std::cout << "received '/read' message with arguments: "
+                << " finality= " << a1 << " rating= " << a2 << "\n";
+                
+                read(a1, a2);
                 
             } else if( std::strcmp( m.AddressPattern(), "/stop" ) == 0 ){
                 
@@ -100,16 +110,17 @@ class RatingListener : public osc::OscPacketListener {
     }
     
     // SERIALIZE: Write the compressed array as a binary little endian record
-    void write(int id, int* cm, int rating, int len) {
+    void write(int id, int* cm, int finality, int rating) {
         if (rating > 0) {
             // Open the knowledge base to append to the file (never overwrite!)
             fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app);
             
             if (file.is_open())
             {
+                file.write((char*) &finality, sizeof(int));
                 file.write((char*) &rating, sizeof(int));
                 file.write((char*) &id, sizeof(int));
-                for (int i = 0;i<len;i++) {
+                for (int i = 0;i<18;i++) {
                     file.write((char*) &cm[i], sizeof(int));
                 }
                 
@@ -124,8 +135,8 @@ class RatingListener : public osc::OscPacketListener {
     
     // DESERIALIZE: Read the compressed motive array from the binary file
     
-    // TODO: Scan through different positions in fixed format records (use variable pos)
-    int* read(int finality) {
+    // Retrieve a motive based on a finality value
+    int* read(int finality, int rating) {
         
         // Open the knowledge base to append to the file, and to read binary data
         // Construct MM object
@@ -134,21 +145,40 @@ class RatingListener : public osc::OscPacketListener {
         
         if (file.is_open())
         {
-            // Navigate to the first position in the file TODO use pos or search
+            int f = 0;
+            int r = 0;
+            int id = 0;
+            // Navigate to the first position in the file
+            // TODO RANDOM SEARCH START POSITION
             file.seekg (0, file.beg);
+            // TODO check file size & num elements
             
-            int rating = 0;
-            file.read((char *) &rating, sizeof(18));
-            cm = new int[18];
-            cout << " Rating is  " << rating << "\n";
-            
-            // Read the data in as an array of size N
-            int values[18];
-            
-            file.read((char*)values, 18*sizeof(int));
-            for (int i=0;i<18;i++){
-                cout << "  Element [" << i << "] = " << values[i];
-                cm[i] = values[i];
+            int test = 10;
+            while (test > 0) {
+                
+                file.read((char *) &f, sizeof(int));
+                file.read((char *) &r, sizeof(int));
+                file.read((char *) &id, sizeof(int));
+
+                cout << "\n**************  Finality is  " << f << " Rating is  " << r << " Id is  " << id << "\n";
+                
+               // if (f == finality && r = rating){
+                    cm = new int[18];
+                    
+                    // Read the data in as an array of size N
+                    int values[18];
+                    
+                    file.read((char*)values, 18*sizeof(int));
+                    for (int i=0;i<18;i++){
+                        cout << "  Element [" << i << "] = " << values[i];
+                        cm[i] = values[i];
+                    }
+                
+                cout << "***********************************";
+                    //return cm;
+                //}
+                
+                test--;
             }
         } else {
             fprintf(stderr, "\nRead: Error opening knowledgebase.bin\n\n");
