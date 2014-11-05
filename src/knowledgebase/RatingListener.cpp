@@ -22,6 +22,12 @@ namespace std {
 #include <oscpack/osc/OscReceivedElements.h>
 #include <oscpack/osc/OscPacketListener.h>
 #include <oscpack/ip/UdpSocket.h>
+#include <oscpack/osc/OscOutboundPacketStream.h>
+
+#define ADDRESS "127.0.0.1"
+#define SEND_PORT 7000
+#define RECV_PORT 7001
+#define OUTPUT_BUFFER_SIZE 1024
 
 class RatingListener : public osc::OscPacketListener {
     public:
@@ -29,6 +35,7 @@ class RatingListener : public osc::OscPacketListener {
     int ratingID;
     int rating;
     int* intervals;
+    int sendID;
     
     protected:
     
@@ -90,6 +97,11 @@ class RatingListener : public osc::OscPacketListener {
                 
                 read(a1, a2);
                 
+                cout << "\n SENDING intervals ID = " << sendID;
+                
+                send(sendID, intervals, 18);
+ 
+                
             } else if( std::strcmp( m.AddressPattern(), "/stop" ) == 0 ){
                 
                 osc::ReceivedMessage::const_iterator arg = m.ArgumentsBegin();
@@ -107,6 +119,24 @@ class RatingListener : public osc::OscPacketListener {
             std::cout << "error while parsing message: "
             << m.AddressPattern() << ": " << e.what() << "\n";
         }
+    }
+    
+    // Send the motive array to Max MSP
+    void send(int id, int* melody, int len) {
+        
+        UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, SEND_PORT ) );
+        
+        char buffer[OUTPUT_BUFFER_SIZE];
+        osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
+        cout << "  --> ";
+        p << osc::BeginBundleImmediate
+        << osc::BeginMessage( "/dirId" ) << id;
+        for (int i = 0;i<len;i++) {
+            p << melody[i];
+        }
+        p << osc::EndMessage << osc::EndBundle;
+        
+        transmitSocket.Send(p.Data(), p.Size());
     }
     
     // SERIALIZE: Write the compressed array as a binary little endian record
@@ -136,58 +166,60 @@ class RatingListener : public osc::OscPacketListener {
     // DESERIALIZE: Read the compressed motive array from the binary file
     
     // Retrieve a motive based on a finality value
-    int* read(int finality, int rating) {
+    void read(int finality, int rating) {
         
         // Open the knowledge base to append to the file, and to read binary data
         // Construct MM object
         fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app | ios::beg);
-        int* cm;
+        int f = 0;
+        int r = 0;
+        int id = 0;
+        intervals = new int[18];
         
         if (file.is_open())
         {
-            int f = 0;
-            int r = 0;
-            int id = 0;
+            
+            // Find size of file
+            int fileSize = file.tellg();
+            // Store current position
+            int pos = 0;
+            
             // Navigate to the first position in the file
             // TODO RANDOM SEARCH START POSITION
             file.seekg (0, file.beg);
-            // TODO check file size & num elements
             
-            int test = 10;
-            while (test > 0) {
+            while (pos < fileSize) {
                 
                 file.read((char *) &f, sizeof(int));
                 file.read((char *) &r, sizeof(int));
                 file.read((char *) &id, sizeof(int));
-
+                sendID = id;
+                
                 cout << "\n**************  Finality is  " << f << " Rating is  " << r << " Id is  " << id << "\n";
                 
-               // if (f == finality && r = rating){
-                    cm = new int[18];
-                    
-                    // Read the data in as an array of size N
+                if (f == finality && r == rating){
+                    // If attributes match, read the melody data in as an array of size 18
                     int values[18];
                     
                     file.read((char*)values, 18*sizeof(int));
                     for (int i=0;i<18;i++){
                         cout << "  Element [" << i << "] = " << values[i];
-                        cm[i] = values[i];
+                        intervals[i] = values[i];
                     }
+                    
+                    cout << "FOUND MATCH ***********************************";
+                    pos = fileSize + 1;
+                }
                 
-                cout << "***********************************";
-                    //return cm;
-                //}
+                pos = pos + sizeof(int)*21;
                 
-                test--;
+                
             }
         } else {
             fprintf(stderr, "\nRead: Error opening knowledgebase.bin\n\n");
             exit (1);
         }
         file.close();
-        
-        return cm;
     }
-    
 };
 
