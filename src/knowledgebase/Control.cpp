@@ -41,7 +41,7 @@ void send(int id, int* melody, int len) {
     osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
     cout << "  --> ";
     p << osc::BeginBundleImmediate
-    << osc::BeginMessage( "/dirId" ) << id;
+    << osc::BeginMessage( "/compose" ) << len;
     for (int i = 0;i<len;i++) {
         p << melody[i];
     }
@@ -66,16 +66,18 @@ void listen() {
 // Compose a new motive and send it
 void compose(MotiveMatrix* mm, MotiveVariation* mv) {
     // TODO path length
-    vector<pair<int,int>> mp = mv->selectPath(13, mm);
+    int len = 8;
+    
+    vector<pair<int,int>> mp = mv->selectPath(len, mm);
     cout << " Path is ";
     
     for (auto it = begin (mp); it != end (mp); ++it) {
         cout << " (" << it->first << ", " << it->second << ") ";
     }
     
-    int* melody = mv->selectMelody(13, mp, mm);
+    int* melody = mv->selectMelody(len, mp, mm);
     
-    send(id++, melody, 13);
+    send(id++, melody, len);
 }
 
 

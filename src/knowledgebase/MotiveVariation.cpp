@@ -91,9 +91,7 @@ public:
      A weighted moving average is used to determine the likelihood of the
      next interval being positive or negative. If the interval value is 0,
      the note is repeated and is not part of the average calculation.
-     
-     Average has a history of 5 intervals, weighted at 5, 10, 20, 30, and 35.
-     
+          
      *********************************************************************/
     int* selectMelody(int pathLength, vector<pair<int,int>> mp, MotiveMatrix* mm) {
         // Construct an array of interval values

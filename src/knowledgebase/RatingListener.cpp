@@ -30,12 +30,13 @@ namespace std {
 #define OUTPUT_BUFFER_SIZE 1024
 
 class RatingListener : public osc::OscPacketListener {
+    
     public:
     
-    int ratingID;
+    int len;
     int rating;
     int* intervals;
-    int sendID;
+    int finality;
     
     protected:
     
@@ -43,21 +44,19 @@ class RatingListener : public osc::OscPacketListener {
                                 const IpEndpointName& remoteEndpoint )
     {
         (void) remoteEndpoint; // suppress unused parameter warning
-        
+        MotiveMatrix* mm = new MotiveMatrix();
+        MotiveVariation* mv = new MotiveVariation();
         try {
             // Check for the type of message
             if ( std::strcmp( m.AddressPattern(), "/rate" ) == 0 ){
                 // Receive a rating
                 osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
-                osc::int32 id;
+                osc::int32 len;
                 osc::int32 finality;
-                osc::int32 r;
+                osc::int32 rating;
                 osc::int32 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18;
                 
-                args >> id >> finality >> r >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8 >> a9 >> a10 >> a11 >> a12 >> a13 >> a14 >> a15 >> a16 >> a17 >> a18 >> osc::EndMessage;
-                
-                ratingID = id;
-                rating = r;
+                args >> len >> finality >> rating >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8 >> a9 >> a10 >> a11 >> a12 >> a13 >> a14 >> a15 >> a16 >> a17 >> a18 >> osc::EndMessage;
                 
                 intervals = new int[18];
                 intervals[0] = a1;
@@ -79,10 +78,10 @@ class RatingListener : public osc::OscPacketListener {
                 intervals[16] = a17;
                 intervals[17] = a18;
                 
-                std::cout << "received '/rate' message with id " << ratingID << " finality = " << finality << " rating = " << rating
+                std::cout << "received '/rate' message with length " << len << " finality = " << finality << " rating = " << rating
                 << " and a1 = " << a1 << " a18 = " << a18 << "\n";
                 
-                write(ratingID, intervals, finality, rating);
+                write(len, intervals, finality, rating);
                 
                 
             } else if( std::strcmp( m.AddressPattern(), "/read" ) == 0 ){
@@ -97,10 +96,21 @@ class RatingListener : public osc::OscPacketListener {
                 
                 read(a1, a2);
                 
-                cout << "\n SENDING intervals ID = " << sendID;
+                cout << "\n SENDING intervals length = " << len;
                 
-                send(sendID, intervals, 18);
- 
+                send(len, intervals);
+                
+            } else if( std::strcmp( m.AddressPattern(), "/compose" ) == 0 ){
+                
+                osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
+                
+                osc::int32 len;
+                args >> len >> osc::EndMessage;
+                
+                std::cout << "received '/compose' message with argument: "
+                << len << "\n";
+                
+                compose(len);
                 
             } else if( std::strcmp( m.AddressPattern(), "/stop" ) == 0 ){
                 
@@ -122,15 +132,17 @@ class RatingListener : public osc::OscPacketListener {
     }
     
     // Send the motive array to Max MSP
-    void send(int id, int* melody, int len) {
+    void send(int len, int* melody) {
         
         UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, SEND_PORT ) );
         
         char buffer[OUTPUT_BUFFER_SIZE];
         osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
         cout << "  --> ";
+        
         p << osc::BeginBundleImmediate
-        << osc::BeginMessage( "/dirId" ) << id;
+        << osc::BeginMessage( "/compose" ) << len;
+        
         for (int i = 0;i<len;i++) {
             p << melody[i];
         }
@@ -139,18 +151,42 @@ class RatingListener : public osc::OscPacketListener {
         transmitSocket.Send(p.Data(), p.Size());
     }
     
+    // Compose a new motive and send it
+    void compose(int len) {
+
+        MotiveMatrix* mm = new MotiveMatrix();
+        MotiveVariation* mv = new MotiveVariation();
+        
+        vector<pair<int,int>> mp = mv->selectPath(len, mm);
+        cout << " Path is ";
+        
+        for (auto it = begin (mp); it != end (mp); ++it) {
+            cout << " (" << it->first << ", " << it->second << ") ";
+        }
+        
+        int* melody = mv->selectMelody(len, mp, mm);
+        
+        send(len, melody);
+        
+    }
+    
     // SERIALIZE: Write the compressed array as a binary little endian record
-    void write(int id, int* cm, int finality, int rating) {
+    void write(int len, int* cm, int finality, int rating) {
         if (rating > 0) {
             // Open the knowledge base to append to the file (never overwrite!)
             fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app);
             
             if (file.is_open())
             {
+                file.write((char*) &len, sizeof(int));
                 file.write((char*) &finality, sizeof(int));
                 file.write((char*) &rating, sizeof(int));
-                file.write((char*) &id, sizeof(int));
-                for (int i = 0;i<18;i++) {
+                
+                cout << " Writing rated melody...";
+                
+                // Ignore default arguments sent, only write valid intervals
+                for (int i = 0;i<len;i++) {
+                    cout << "WRITE " << cm[i];
                     file.write((char*) &cm[i], sizeof(int));
                 }
                 
@@ -165,6 +201,8 @@ class RatingListener : public osc::OscPacketListener {
     
     // DESERIALIZE: Read the compressed motive array from the binary file
     
+    // TODO ONLINE SEARCH DISABLED
+    
     // Retrieve a motive based on a finality value
     void read(int finality, int rating) {
         
@@ -173,8 +211,7 @@ class RatingListener : public osc::OscPacketListener {
         fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app | ios::beg);
         int f = 0;
         int r = 0;
-        int id = 0;
-        intervals = new int[18];
+        int l = 0;
         
         if (file.is_open())
         {
@@ -189,20 +226,22 @@ class RatingListener : public osc::OscPacketListener {
             file.seekg (0, file.beg);
             
             while (pos < fileSize) {
-                
+                file.read((char *) &l, sizeof(int));
                 file.read((char *) &f, sizeof(int));
                 file.read((char *) &r, sizeof(int));
-                file.read((char *) &id, sizeof(int));
-                sendID = id;
+                intervals = new int[l];
+
+                cout << "\n**************  " << " Len is  " << l << " Finality is  " << f << " Rating is  " << r << "\n";
                 
-                cout << "\n**************  Finality is  " << f << " Rating is  " << r << " Id is  " << id << "\n";
+                int values[l];
+                len = l;
+                
+                file.read((char*)values, l*sizeof(int));
                 
                 if (f == finality && r == rating){
                     // If attributes match, read the melody data in as an array of size 18
-                    int values[18];
-                    
-                    file.read((char*)values, 18*sizeof(int));
-                    for (int i=0;i<18;i++){
+
+                    for (int i=0;i<l;i++){
                         cout << "  Element [" << i << "] = " << values[i];
                         intervals[i] = values[i];
                     }
@@ -210,10 +249,9 @@ class RatingListener : public osc::OscPacketListener {
                     cout << "FOUND MATCH ***********************************";
                     pos = fileSize + 1;
                 }
-                
-                pos = pos + sizeof(int)*21;
-                
-                
+                // Skip ahead by len, finality, and rating fields, + the length of the array fields
+                pos = pos + sizeof(int)*(l + 3);
+
             }
         } else {
             fprintf(stderr, "\nRead: Error opening knowledgebase.bin\n\n");
