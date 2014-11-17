@@ -7,7 +7,7 @@
 			"revision" : 8
 		}
 ,
-		"rect" : [ 25.0, 69.0, 1017.0, 626.0 ],
+		"rect" : [ 22.0, 48.0, 1017.0, 626.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -50,7 +50,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 317.636292, 173.0, 46.0, 20.0 ],
-					"text" : "rating"
+					"text" : "finality"
 				}
 
 			}
@@ -64,7 +64,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 225.636292, 173.0, 46.0, 20.0 ],
-					"text" : "finality"
+					"text" : "rating"
 				}
 
 			}
@@ -140,12 +140,13 @@
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"id" : "obj-59",
+					"linecount" : 2,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 94.0, 311.5, 58.0, 18.0 ],
-					"text" : "/read 2 9"
+					"patching_rect" : [ 94.0, 311.5, 58.0, 31.0 ],
+					"text" : "/read 9 10"
 				}
 
 			}
@@ -172,22 +173,8 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 42.0, 123.0, 150.0, 33.0 ],
+					"patching_rect" : [ 244.0, 121.0, 150.0, 33.0 ],
 					"text" : "Select all melodies with a finality rating of x\n"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 12.0,
-					"frgb" : 0.0,
-					"id" : "obj-2",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 42.0, 27.0, 150.0, 20.0 ],
-					"text" : "SELF-GENERATING"
 				}
 
 			}
