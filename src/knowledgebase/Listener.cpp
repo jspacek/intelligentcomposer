@@ -87,6 +87,8 @@ public:
                 // Write the details of this melody into the file
                 io->write(len, intervals, finality, interest);
                 
+                cout << " \n wrote to file";
+                
                 
             } else if( std::strcmp( m.AddressPattern(), "/read" ) == 0 ){
                 

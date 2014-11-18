@@ -66,12 +66,12 @@ public:
             } else if (strcmp(command, "r") == 0) {
                 // Retrieve a variation based on parameters
                 //io->read(finality, interest, span, max, min, direction);
-                io->read(5, 2, 99, 99, 99, 99);
+                io->read(8, 8, 99, 99, 99, 99);
             } else if (strcmp(command, "w") == 0) {
                 // Store a variation based on parameters
                 //io->write(len, intervals, finality, interest);
-                int intervals [5] = {2,3,-1,-1,0};
-                io->write(5, intervals, 5, 2);
+                int intervals [8] = {2,3,-1,-1,0, 1, 1, -1};
+                io->write(8, intervals, 8, 8);
             } else if (strcmp(command, "l") == 0) {
                 // Listen for a rating
                 listen();

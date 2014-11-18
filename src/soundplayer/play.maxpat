@@ -88,11 +88,11 @@
 					"fontsize" : 12.0,
 					"id" : "obj-9",
 					"maxclass" : "newobj",
-					"numinlets" : 3,
+					"numinlets" : 7,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 194.636292, 253.0, 81.0, 20.0 ],
-					"text" : "pak /read 0 0"
+					"patching_rect" : [ 194.636292, 253.0, 147.0, 20.0 ],
+					"text" : "pak /read 0 0 99 99 99 99"
 				}
 
 			}
@@ -140,13 +140,13 @@
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"id" : "obj-59",
-					"linecount" : 2,
+					"linecount" : 3,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 94.0, 311.5, 58.0, 31.0 ],
-					"text" : "/read 9 10"
+					"patching_rect" : [ 94.0, 311.5, 58.0, 45.0 ],
+					"text" : "/read 0 0 99 99 99 99"
 				}
 
 			}
@@ -193,7 +193,7 @@
 					"destination" : [ "obj-9", 2 ],
 					"disabled" : 0,
 					"hidden" : 0,
-					"midpoints" : [ 327.136292, 240.0, 266.136292, 240.0 ],
+					"midpoints" : [ 327.136292, 240.0, 246.802963, 240.0 ],
 					"source" : [ "obj-15", 0 ]
 				}
 
