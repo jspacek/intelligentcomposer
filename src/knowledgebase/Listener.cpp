@@ -95,6 +95,7 @@ public:
                 osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
                 
                 // Request parameters from Max MSP
+                osc::int32 length;
                 osc::int32 finality;
                 osc::int32 interest;
                 osc::int32 span;
@@ -103,21 +104,21 @@ public:
                 osc::int32 direction;
                 
                 // Parse arguments from the message
-                args >> finality >> interest >> span >> max >> min >> direction >> osc::EndMessage;
+                args >> length >> finality >> interest >> span >> max >> min >> direction >> osc::EndMessage;
                 
                 if (DEBUG)
-                    std::cout << "Received '/read' message with arguments: "
+                    std::cout << "Received '/read' message with arguments: " << " length= " << length
                     << " finality= " << finality << " interest= " << interest << " span= " << span
                     << " max= " << max << " min= " << min << " direction= " << direction << "\n";
                 
                 // Retrieve a melody based on the parameters
-                io->read(finality, interest, span, max, min, direction);
+                io->read(length, finality, interest, span, max, min, direction);
                 
                 if (DEBUG)
                     cout << "\n SENDING intervals of length = " << io->len;
                 
                 // Send the melody with its length to Max MSP for playback
-                send(io->len, io->intervals);
+                if (io->found) send(io->len, io->intervals);
                 
             } else if( std::strcmp( m.AddressPattern(), "/compose" ) == 0 ){
                 

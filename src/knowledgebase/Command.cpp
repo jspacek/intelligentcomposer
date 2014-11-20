@@ -66,7 +66,7 @@ public:
             } else if (strcmp(command, "r") == 0) {
                 // Retrieve a variation based on parameters
                 //io->read(finality, interest, span, max, min, direction);
-                io->read(8, 8, 99, 99, 99, 99);
+                io->read(8, 8, 8, 99, 99, 99, 99);
             } else if (strcmp(command, "w") == 0) {
                 // Store a variation based on parameters
                 //io->write(len, intervals, finality, interest);

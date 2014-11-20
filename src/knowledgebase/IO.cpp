@@ -27,6 +27,7 @@ public:
     int finality, interest;
     // Calculated attributes
     int span, max, min, direction;
+    bool found;
     
     // SERIALIZE: Write the compressed array as a binary little endian record
     void write(int len, int* melody, int finality, int interest) {
@@ -83,7 +84,7 @@ public:
     
     // DESERIALIZE: Read the compressed motive array from the binary file
     // Retrieve a motive based on a finality value
-    void read(int finality, int interest, int span, int max, int min, int direction) {
+    void read(int length, int finality, int interest, int span, int max, int min, int direction) {
         
         // Open the knowledge base to append to the file, and to read binary data
         fstream file ("bin/knowledgebase.bin", ios::out | ios::in | ios::binary | ios::app | ios::beg);
@@ -95,8 +96,8 @@ public:
             // Find size of file
             file.seekg (0, file.end);
             int fileSize = file.tellg();
-            // Store current position
-            int start = rand() % fileSize/sizeof(int);
+            // Search randomly, around the half way mark of the file at most
+            int start = rand() % fileSize/(2*sizeof(int));
             if (DEBUG) cout << "\n File size is " << fileSize << " random start is " << start;
             int pos = start;
             if (start*sizeof(int) > fileSize-MAX_RECORD_SIZE) {
@@ -112,13 +113,13 @@ public:
             
             // Make sure we're at the begning of a variable-sized record
             file.read((char *) &beg, sizeof(int));
-            while (beg != RECORD_DELIM && pos < fileSize) {
+            while (beg != RECORD_DELIM && pos*sizeof(int) < fileSize) {
                 pos++;
                 file.read((char *) &beg, sizeof(int));
                 if (DEBUG)
                     cout << "\n Seeking beginning of record, found " << beg << "\n";
             }
-            int found = 0;
+            found = 0;
             
             // Perform search for a melody with the passed in attributes
             while (pos < fileSize) {
@@ -132,7 +133,7 @@ public:
                 file.read((char *) &d, sizeof(int));
                 
                 if (DEBUG)
-                    std::cout << "\nRetrieved : "
+                    std::cout << "\nRetrieved : " << " length= " << l
                     << " finality= " << f << " interest= " << i << " span= " << s
                     << " max= " << mx << " min= " << mn << " direction= " << d;
                 // Holder for the melodic intervals
@@ -145,12 +146,12 @@ public:
                 file.read((char *) &beg, sizeof(int));
                 
                 if (DEBUG)
-                    std::cout << "\nAttempt match for : "
+                    std::cout << "\nAttempt match for : " << " length= " << length
                     << " finality= " << finality << " interest= " << interest << " span= " << span
                     << " max= " << max << " min= " << min << " direction= " << direction;
                 
                 // Retrieve the matching melody intervals
-                if ((finality==NO_SEARCH || f==finality) && (interest==NO_SEARCH || i==interest)
+                if ((length==NO_SEARCH || l==length) && (finality==NO_SEARCH || f==finality) && (interest==NO_SEARCH || i==interest)
                     && (span==NO_SEARCH || s==span) && (max==NO_SEARCH || mx==max)
                     && (min==NO_SEARCH || mn==min) && (direction==NO_SEARCH || d==direction)){
                     // If attributes match, read the melody data in as an array of size 18
