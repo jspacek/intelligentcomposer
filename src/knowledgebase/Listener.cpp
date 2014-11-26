@@ -50,13 +50,14 @@ public:
                 // Receive rating from MaxMSP
                 osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
                 // User defined variables
+                osc::int32 channel;
                 osc::int32 len;
                 osc::int32 finality;
                 osc::int32 interest;
                 // Melodic intervals to rate
                 osc::int32 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18;
                 
-                args >> len >> finality >> interest >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8 >> a9
+                args >> channel >> len >> finality >> interest >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8 >> a9
                 >> a10 >> a11 >> a12 >> a13 >> a14 >> a15 >> a16 >> a17 >> a18 >> osc::EndMessage;
                 
                 // Max MSP can send a maximum of 18 interval values
@@ -81,7 +82,7 @@ public:
                 intervals[17] = a18;
                 
                 if (DEBUG)
-                    std::cout << "Received '/rate' message with length " << len << " finality = " << finality << " interest = " << interest
+                    std::cout << "Received '/rate' message with channel " << channel << " length " << len << " finality = " << finality << " interest = " << interest
                     << " and a1 = " << a1 << " a18 = " << a18 << "\n";
                 
                 // Write the details of this melody into the file
@@ -95,6 +96,7 @@ public:
                 osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
                 
                 // Request parameters from Max MSP
+                osc::int32 channel;
                 osc::int32 length;
                 osc::int32 finality;
                 osc::int32 interest;
@@ -104,34 +106,37 @@ public:
                 osc::int32 direction;
                 
                 // Parse arguments from the message
-                args >> length >> finality >> interest >> span >> max >> min >> direction >> osc::EndMessage;
+                args >> channel >> length >> finality >> interest >> span >> max >> min >> direction >> osc::EndMessage;
                 
                 if (DEBUG)
-                    std::cout << "Received '/read' message with arguments: " << " length= " << length
+                    std::cout << "Received '/read' message with arguments: " << " channel " << channel << " length= " << length
                     << " finality= " << finality << " interest= " << interest << " span= " << span
                     << " max= " << max << " min= " << min << " direction= " << direction << "\n";
                 
                 // Retrieve a melody based on the parameters
+                // Note: channel is passed manually and is not a search param
                 io->read(length, finality, interest, span, max, min, direction);
                 
                 if (DEBUG)
                     cout << "\n SENDING intervals of length = " << io->len;
                 
                 // Send the melody with its length to Max MSP for playback
-                if (io->found) send(io->len, io->intervals);
+                if (io->found) send(channel, io->len, io->intervals);
                 
             } else if( std::strcmp( m.AddressPattern(), "/compose" ) == 0 ){
                 
                 osc::ReceivedMessageArgumentStream args = m.ArgumentStream();
                 
                 osc::int32 len;
-                args >> len >> osc::EndMessage;
+                osc::int32 channel;
+                
+                args >> channel >> len >> osc::EndMessage;
                 
                 std::cout << "received '/compose' message with argument: "
                 << len << "\n";
                 
                 path->compose(len, matrix);
-                send(path->len, path->intervals);
+                send(channel, path->len, path->intervals);
                 
                 
             } else if( std::strcmp( m.AddressPattern(), "/stop" ) == 0 ){
@@ -154,7 +159,7 @@ public:
     }
     
     // Send the motive array to Max MSP
-    void send(int len, int* melody) {
+    void send(int channel, int len, int* melody) {
         
         UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, SEND_PORT ) );
         
@@ -163,7 +168,7 @@ public:
         cout << "  --> ";
         
         p << osc::BeginBundleImmediate
-        << osc::BeginMessage( "/send" ) << len;
+        << osc::BeginMessage( "/send" ) << channel << len;
         
         for (int i = 0;i<len;i++) {
             p << melody[i];
@@ -172,13 +177,6 @@ public:
         
         transmitSocket.Send(p.Data(), p.Size());
     }
-  /*  int main () {
-        matrix = new Matrix();
-        path = new Path();
-        io = new IO();
-        
-        return 0;
-    }*/
 };
 
 
