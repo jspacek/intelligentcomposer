@@ -91,6 +91,7 @@ public:
         int i = 0;
         int j = 0;
         cout << "\n Melody Selection ";
+        
         // Loop around the matrix to select interval values
         // then use weighted moving average to determine if
         // positive, negative or equal
@@ -99,28 +100,17 @@ public:
             if (i < 5) j = 4;
             else j = i;
             history = 5*intervals[j-3] + 10*intervals[j-2] + 50*intervals[j-1];
-            
-            // amount to shift center position
-            cout << "\n ***** history = " << history;
-
             // if random is > prob
             int random = 50 + history*.15;
-            
-            
             if (random < 5 ) random = 5;
             else if (random > 99) random = 99;
-            cout << " \nrandom = " << random;
-
             
             int r = rand() % 100;
-            cout << "\n r  " << r;
-            
             if (r > random) intervals[i] = matrix->matrix[it->first][it->second];
             else if (r <= random) intervals[i] = -1 * matrix->matrix[it->first][it->second];
-            
-            cout << " interval = " << intervals[i] << " ***********";
             i++;
         }
+        
     }
     
     // Compose a new motive and send it
